@@ -7,4 +7,4 @@ Folders:
      - systmone - Fictional web site that simulates patient health records
      - OpenAPI - OpenAPI Specificaton for facade APIs
 - baw - TWX file containing orchestration flow for health assessment
-- Bot - Contains IBM RPA Bot to extract data from patient health website, and build a health report. both are invoked from API
+- Bot - Contains a Bot to extract data from patient health website, and  a bot to build a health report. Both bots are invoked from BAW
