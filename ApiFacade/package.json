@@ -1,0 +1,39 @@
+{
+  "name": "CP4AIntegration",
+  "version": "1.0.0",
+  "description": "Example on using CP4AIntegration. React-app with a Node Express Backend for APIs",
+  "author": {
+    "name": "Nigel T. Crowther"
+  },
+  "license": "MIT",
+  "scripts": {
+    "client": "cd client && yarn start",
+    "server": "nodemon server.js",
+    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+    "dev:server": "cd client && yarn build && cd .. && yarn start",
+    "start": "node server.js",
+    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^6.5.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/esausilva/example-create-react-app-express.git"
+  },
+  "bugs": {
+    "url": "https://github.com/esausilva/example-create-react-app-express/issues"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "create-react-app"
+  ],
+  "dependencies": {
+    "axios": "^0.26.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.17.3",
+    "fs": "^0.0.1-security",
+    "request": "^2.88.2"
+  }
+}

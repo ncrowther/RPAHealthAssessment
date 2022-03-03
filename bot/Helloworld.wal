@@ -1,0 +1,26 @@
+
+	ª‘¡çıKµdU›≠5i‘// Input Variables
+defVar --name first_name --type String --parameter  --output 
+defVar --name last_name --type String --parameter  --output 
+defVar --name ResponseCode --type String --value 0 --output 
+defVar --name ResponseMessage --type String --output 
+// Local Variables 
+defVar --name success --type Boolean --value True
+
+bindProcessVariables --mappings "first_name=first_name"
+bindProcessVariables --mappings "last_name=last_name"
+
+setVar --name "${ResponseMessage}" --value "Hello ${first_name} ${last_name}"
+
+messageBox --title HelloWorld --text "${ResponseMessage}" --icon "Information" --buttons "OK" --defaultbutton "FirstButton"
+
+// Add your bot code here 
+
+// Return response.  ResponseCode is 0 for success, any other number for error code
+if --left "${success}" --operator "Is_True"
+	setVar --name "${ResponseCode}" --value 0
+else
+	setVar --name "${ResponseCode}" --value "-1"
+	setVar --name "${ResponseMessage}" --value "Bot failed"
+endIf
+"	~“O	f£êMÜzû'^À'›*21.0.1.0

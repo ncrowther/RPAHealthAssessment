@@ -1,0 +1,292 @@
+openapi: 3.0.1
+info:
+  title: RPA API
+  description: |-
+    This API presents an authenticated interface to invoke bot scripts both synchronously and asynchronously.  Authentication is enforced through Basic Auth (username/password).  Authentication is managed through a nodejs server script which has to be deployed in the DMZ. On invocation of the API, the server script checks the credentials against a LDAP database and if authenticated, forwards on the request to the specified RPA computer behind a firewall. The API has a loopback setting to simulate an RPA bot when an RPA environment is not available. ![Architecture](https://rpapi.eu-gb.mybluemix.net/Architecture.png)
+
+    Examples and labs- <br><br>[Presentation](/RPAWithAppConnect.pdf) <br>[Lab Guide](/labguide.pdf) <br>[Video](https://youtu.be/_BL6wobZlJ8) <br>[IBM RPA Agent API](https://www.ibm.com/docs/en/rpa/21.0?topic=bot-starting-bots-by-api-call) <br>[Git Repo](https://github.com/ncrowther/rpa-secure-gateway.git)
+  contact:
+    email: ncrowther@uk.ibm.com
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+- url: http://9f59-79-71-126-74.ngrok.io
+tags:
+- name: API Facade for IBM CP4A
+  description: Facade on top of IBM ODM, IBM RPA and IBM Content Navigator
+  externalDocs:
+    description: Find out more
+    url: http://localhost:8080/docs
+paths:
+  /runsync:
+    post:
+      tags:
+      - RPA API
+      summary: script
+      description: Synchronously runs a script on a RPA agent specified in the URL.  All
+        requests are authenticated using Basic Auth.
+      operationId: runSyncScript
+      parameters:
+      - name: script
+        in: query
+        description: Bot script name to run.  This script must be published on the
+          tenant belonging to the host
+        required: true
+        schema:
+          type: string
+      - name: rpaAgentUrl
+        in: query
+        description: URL of the RPA agent. If set to LOOPBACK then 202 always returned
+          to simulate a succesful bot run.  If a URL, it must point to an RPA agent.  It
+          can point to either port 8099 (Direct) or 8096 (Broker). Script parameters
+          are passed in the request body.  See documentation https://www.ibm.com/docs/en/rpa/20.12?topic=bot-starting-bots-by-api-ca
+          for more details
+        required: true
+        schema:
+          type: string
+      - name: unlockMachine
+        in: query
+        description: True if unlock False otherwise
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Input parameters corresponding to the RPA bot script to be invoked.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RPARequest'
+        required: false
+      responses:
+        200:
+          description: Response for the execution of the bot.
+            Contains  the output parameters that are returned by the bot execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RPAResponse'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Error occurring when invoking the execution of the decision
+            service operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      deprecated: false
+  /uploadFile:
+    post:
+      tags:
+      - IBM Content Navigator API
+      summary: script
+      description: Uploads a file to content navigator
+      operationId: uploadFile
+      parameters:
+      - name: sourceFilePath
+        in: query
+        description: Path of the source file
+        required: true
+        schema:
+          type: string
+      - name: sourceFileName
+        in: query
+        description: Name of the source file
+        required: true
+        schema:
+          type: string
+      - name: destinationFolder
+        in: query
+        description: Destination folder in Content Navigator
+        required: true
+        schema:
+          type: string
+      - name: destinationFileName
+        in: query
+        description: Destination file name in Content Navigator
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Response for the execution of the bot.
+            Contains  the output parameters that are returned by the bot execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NavigatorResponse'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Error occurring when invoking the execution of the decision
+            service operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      deprecated: false
+  /HealthAssessment_RuleApp/1.0/HealthAssessment/1.0:
+    post:
+      tags:
+      - ODM API
+      summary: Invokes the execution of the decision service operation HealthAssessment.
+      description: Executes the decision service operation HealthAssessment with the
+        path /HealthAssessment_RuleApp/1.0/HealthAssessment/1.0.
+      operationId: callHealthAssessmentDecisionServiceOperation
+      requestBody:
+        description: Request for the execution of the decision service operation.
+          Contains notably the input parameters that are used for the execution.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OdmRequest'
+        required: true
+      responses:
+        "200":
+          description: Response for the execution of the decision service operation.
+            Contains notably the output parameters that are returned by the execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OdmResponse'
+        default:
+          description: Error occurring when invoking the execution of the decision
+            service operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    RPARequest:
+      type: object
+      properties:
+        in_param_patient_id:
+          type: string
+          description: "Unique identifier of a patient"
+        in_param_patient_name:
+          type: string
+        in_param_patient_address:
+          type: string
+        in_param_birth_date:
+          type: string
+        in_param_bp_assesment:
+          type: string
+        in_param_systolic_bp:
+          type: integer
+        in_param_diastolic_bp:
+          type: integer
+        in_param_bmi:
+          type: string
+        in_param_bmi_assesment:
+          type: string
+        in_param_gender:
+          type: string
+        in_param_weight:
+          type: string
+        in_param_smoker:
+          type: string
+        in_param_exercise:
+          type: string
+      description: Input parameters corresponding to the RPA bot script to be invoked.
+    OdmRequest:
+      type: "object"
+      properties:
+        __DecisionID__:
+          type: "string"
+          description: "Unique identifier representing the execution of the decision\
+            \ service operation. If it is not specified, it will be computed automatically."
+        diastolicPressure:
+          type: "integer"
+        systolicPressure:
+          type: "integer"
+        bmi:
+          type: "integer"
+      description: "Request for the execution of the decision service operation. Contains\
+        \ notably the input parameters that are used for the execution."
+    OdmResponse:
+      type: object
+      properties:
+        __DecisionID__:
+          type: string
+          description: "Unique identifier representing the execution of the decision\
+            \ service operation. If it is not specified, it will be computed automatically."
+        EvaluateBodyMass:
+          type: string
+        EvaluateHypertensionRisk:
+          type: string
+      description: Response for the execution of the decision service operation. Contains
+        notably the output parameters that are returned by the execution.
+    RPAResponse:
+      type: object
+      properties:
+        out_success:
+          type: boolean
+          description: "true if success, false otherwise"
+        out_code:
+          type: string
+          description: "Code indicating error"
+        out_desc:
+          type: string
+          description: "Response description"
+        out_blood_pressure:
+          type: string
+          description: "blood pressure"
+        out_weight:
+          type: string
+          description: "weight"
+        out_height:
+          type: string
+          description: "height"
+        out_bmi:
+          type: string
+          description: "bmi"
+        out_gender:
+          type: string
+          description: "gender"
+    NavigatorResponse:
+      type: object
+      properties:
+        response:
+          type: string
+          description: "contains response data"
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: HTTP error code.
+          format: int32
+        message:
+          type: string
+          description: Error message.
+        details:
+          type: string
+          description: Detailed error message.
+        errorCode:
+          type: string
+          description: Product error code.
+      description: Error occurring when invoking the execution of the decision service
+        operation.

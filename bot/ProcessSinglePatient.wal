@@ -1,0 +1,189 @@
+
+	w{BaF†Êç2¸Ñcü/defVar --name in_param_patient_id --type String --value M3A83727 --parameter
+defVar --name out_success --type Boolean --value True --output
+defVar --name out_code --type String --value 00 --output
+defVar --name out_desc --type String --value OK --output
+defVar --name out_blood_pressure --type String --output
+defVar --name out_weight --type String --output
+defVar --name out_height --type String --output
+defVar --name out_bmi --type String --output
+defVar --name out_gender --type String --output
+defVar --name browserId --type Browser
+defVar --name focusCorpUrl --type String --value "http://localhost:3000/"
+defVar --name bloodPressure --type String
+defVar --name actualRepaymentAmt --type String
+defVar --name subTextList --type List --innertype String
+defVar --name controlId --type String
+defVar --name xpath --type String
+defVar --name fieldPresent --type Boolean --value False
+defVar --name htmlCode --type String
+defVar --name bloodPressureStart --type Numeric --value 17
+defVar --name bloodPressureLen --type Numeric --value 7
+defVar --name weightStart --type Numeric --value 9
+defVar --name heightStart --type Numeric --value 9
+defVar --name bmiStart --type Numeric --value 6
+defVar --name genderStart --type Numeric --value 9
+defVar --name genderLen --type Numeric --value 8
+defVar --name waitForElementStatus --type Boolean
+defVar --name retVal --type Boolean
+defVar --name DEFAULT_TIMEOUT --type TimeSpan --value "00:00:05"
+defVar --name weight --type String
+defVar --name weightPressure --type String
+
+//ProcessbindProcessVariables --mappings "last_name=${in_param_patient_id}"
+
+onError --executenext
+
+goSub --label processSinglePatient
+
+beginSub --name processSinglePatient
+	webStart --name browser --type "Chrome" browserId=value
+	
+	webNavigate --url "${focusCorpUrl}" --comment "Navigate to Refund web site"
+	
+// Search for the ticket
+	goSub --label enterPatientId
+	
+	if --left "${browserId}" --operator "Is_Null" --negate
+		webClose --name browser
+	endIf
+	
+	logMessage --message "out_success: ${out_success}\r\nout_code: ${out_code}\r\nout_desc: ${out_desc}\r\n" --type "Info"
+	
+endSub
+
+
+beginSub --name enterPatientId
+	
+// Find the ticket to refund
+	logMessage --message "EnterPatientId${in_param_patient_id}" --type "Info"
+	setVar --name "${out_success}" --value true
+	
+// Set patient number
+	goSub --label setPatientId
+	
+	goSub --label clickRefundButton
+	
+// Get patient data
+	goSub --label getBloodPressure
+	if --left "${out_success}" --operator "Is_True" --negate
+		return
+	endIf
+	
+	goSub --label getWeight
+	if --left "${out_success}" --operator "Is_True" --negate
+		return
+	endIf
+	
+	goSub --label getHeight
+	if --left "${out_success}" --operator "Is_True" --negate
+		return
+	endIf
+	
+	goSub --label getBmi
+	if --left "${out_success}" --operator "Is_True" --negate
+		return
+	endIf
+	
+	goSub --label getGender
+	if --left "${out_success}" --operator "Is_True" --negate
+		return
+	endIf
+	
+endSub
+
+
+beginSub --name waitWebClickId
+	webWaitElement --selector "Id" --id "${controlId}" --timeout "${DEFAULT_TIMEOUT}" waitForElementStatus=value
+	if --left "${waitForElementStatus}" --operator "Is_True" --negate
+		setVar --name "${out_success}" --value false
+		setVar --name "${out_code}" --value 99
+		setVar --name "${out_desc}" --value "Timeout error"
+		
+		logMessage --message "Failed to find element id ${controlId}" --type "Info"
+		return
+	endIf
+	webClick --selector "Id" --id "${controlId}" --simulatehuman
+endSub
+
+beginSub --name getBloodPressure
+	webGet --selector "XPath" --xpath "/html/body/div/div/h2[1]" --timeout "00:00:05" out_blood_pressure=value
+	
+	if --left "${out_blood_pressure}" --operator "Is_Empty"
+		setVar --name "${out_success}" --value false
+		setVar --name "${out_code}" --value 99
+		setVar --name "${out_desc}" --value "Failed to process"
+		return
+	endIf
+	
+	getSubString --text "${out_blood_pressure}" --start ${bloodPressureStart} out_blood_pressure=value
+	
+endSub
+
+beginSub --name getWeight
+	webGet --selector "XPath" --xpath "/html/body/div/div/h2[2]" --timeout "00:00:05" out_weight=value
+	
+	if --left "${out_weight}" --operator "Is_Empty"
+		setVar --name "${out_success}" --value false
+		setVar --name "${out_code}" --value 99
+		setVar --name "${out_desc}" --value "Failed to process"
+		return
+	endIf
+	
+	getSubString --text "${out_weight}" --start ${weightStart} out_weight=value
+	
+endSub
+
+beginSub --name getHeight
+	webGet --selector "XPath" --xpath "/html/body/div/div/h2[3]" --timeout "00:00:05" out_height=value
+	
+	if --left "${out_height}" --operator "Is_Empty"
+		setVar --name "${out_success}" --value false
+		setVar --name "${out_code}" --value 99
+		setVar --name "${out_desc}" --value "Failed to process"
+		return
+	endIf
+	
+	getSubString --text "${out_height}" --start ${heightStart} out_height=value
+	
+endSub
+
+beginSub --name getBmi
+	webGet --selector "XPath" --xpath "/html/body/div/div/h2[4]" --timeout "00:00:05" out_bmi=value
+	
+	if --left "${out_bmi}" --operator "Is_Empty"
+		setVar --name "${out_success}" --value false
+		setVar --name "${out_code}" --value 99
+		setVar --name "${out_desc}" --value "Failed to process"
+		return
+	endIf
+	
+	getSubString --text "${out_bmi}" --start ${bmiStart} out_bmi=value
+	
+endSub
+
+beginSub --name getGender
+	webGet --selector "XPath" --xpath "/html/body/div/div/h2[5]" --timeout "00:00:05" out_gender=value
+	
+	if --left "${out_gender}" --operator "Is_Empty"
+		setVar --name "${out_success}" --value false
+		setVar --name "${out_code}" --value 99
+		setVar --name "${out_desc}" --value "Failed to process"
+		return
+	endIf
+	
+	getSubString --text "${out_gender}" --start ${genderStart} out_gender=value
+	
+endSub
+
+beginSub --name setPatientId
+	setVar --name "${controlId}" --value patientId
+	goSub --label waitWebClickId
+	webSet --value "${in_param_patient_id}" --selector "Id" --id "${controlId}" --simulatehuman
+endSub
+
+beginSub --name clickRefundButton
+	setVar --name "${controlId}" --value submit
+	goSub --label waitWebClickId
+	delay --timeout "00:00:01"
+endSub"	¬q:n¦|KªË%îøDÀ¿*21.0.1.0

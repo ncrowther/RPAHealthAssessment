@@ -1,0 +1,4 @@
+applications:
+- name: CP4AIntegration
+  memory: 256M
+  services:
