@@ -91,11 +91,6 @@ app.post('/uploadFile', async (req, res) => {
 
   // console.log('graphqlFileInfo: ' + graphqlFileInfo)
 
-  /*
- {"query":"mutation ($contvar:String) {createDocument(repositoryIdentifier:\\"OS1\\" fileInFolderIdentifier: \\"/TECHSALES HOME DIRECTORY/Nigel\\" documentProperties: {name: \\"RPA Cheat Sheetl\\" contentElements:{replace: [{type: CONTENT_TRANSFER contentType: \\"application/vnd.openxmlformats-officedocument.wordprocessingml.document\\" subContentTransfer: {content:$contvar} }]} } checkinAction: {} ) { id name } }", "variables":{"contvar":null} }',
-
- {"query":"mutation ($contvar:String) {createDocument(repositoryIdentifier:\"OS1\" fileInFolderIdentifier:  \"/TECHSALES HOME DIRECTORY/Nigel/medicalAssessment\" documentProperties: {name:  \"PatientAppointments\" contentElements:{replace: [{type: CONTENT_TRANSFER contentType: \"application/vnd.openxmlformats-officedocument.wordprocessingml.document\" subContentTransfer: {content:$contvar} }]} } checkinAction: {} ) { id name } }", "variables":{"contvar":null} }
-*/
   // API calls
   var options = {
     method: 'POST',

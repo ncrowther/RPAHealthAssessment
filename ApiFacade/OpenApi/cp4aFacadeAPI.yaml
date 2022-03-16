@@ -24,7 +24,7 @@ paths:
     post:
       tags:
       - RPA API
-      summary: script
+      summary: Synchronously runs a script on a RPA agent specified in the URL.
       description: Synchronously runs a script on a RPA agent specified in the URL.  All
         requests are authenticated using Basic Auth.
       operationId: runSyncScript
@@ -91,7 +91,7 @@ paths:
     post:
       tags:
       - IBM Content Navigator API
-      summary: script
+      summary: Uploads a file to content navigator
       description: Uploads a file to content navigator
       operationId: uploadFile
       parameters:
