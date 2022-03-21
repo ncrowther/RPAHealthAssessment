@@ -96,7 +96,7 @@ app.post('/uploadFile', async (req, res) => {
     method: 'POST',
     url: 'https://demo-emea-01.automationcloud.ibm.com/dba/dev/content-services-graphql/graphql',
     headers: {
-      Authorization: 'Basic Z3JhcGhxbF9uaWdlbC5maWRAdDc5MjA6WEQ3WVFPVVg2d0ZtcDR2SHRraTR6ZjBBTE1GeFJaSXFmbVVDZEZsYg==',
+      Authorization: 'Basic ',
       Cookie: 'PD-ID-FCN-dba=PD-ID=z8sxT/Ag8WUQFPYdjjrgQI8TxjG/Yd7Jze/vt+X0mcBWZ1qyyygUWsWbeMCgPCjhSrpO2XU7FzVUoeoNjFtmHi20DigiO+xL/BEotAXAlgNzH6KgCwD20pxOLOjAaAs635JSc6eSLyiuswRAetH3Mlpmu54AJ96EDpiXW0sgWVc64wet7fwY3FHFjHBxTQYuVhqTAygcgeNhknRjM2nu5Fs1WnJ4D6VExrKJdDWnyhjCbGGmf4Ft6hd3J+k5vt0TrespHd3KVO9X4M+3H9n29Qg1G50P94Xsab7Morrlg4GiVJfDuJZhyJRPxp3LxxRZ; PD-S-SESSION-ID=hYFcfR1dDb3hhaR35844PQ==:1_2_1_5RwTuKocFR5zbLcZWMYAsbNroVbd8o0OlYAjyrIKIzvq6woe|; com.ibm.bpm.saas.user=graphql_nigel.fid@t7920'
     },
     formData: {
