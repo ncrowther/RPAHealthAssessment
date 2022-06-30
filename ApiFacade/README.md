@@ -3,7 +3,7 @@
 
 # **** Run on IBM Cloud ***
 # npm install
-# cd ./ui-react
+# cd ./systmone
 # npm run build  -  This minified code is referred to in ./server.js
 # cd ..
 # ibmcloud login --sso

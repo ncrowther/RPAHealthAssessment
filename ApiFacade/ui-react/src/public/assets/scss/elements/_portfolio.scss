@@ -1,0 +1,169 @@
+/*==================
+    Portfolio Area
+==================*/
+.portfolio {
+    position: relative;
+    @extend %transition;
+    min-height: 400px;
+    width: 100%;
+    padding-top: 35%;
+
+    @media #{$laptop-device} {
+        min-height: 500px;
+    }
+    @media #{$lg-layout} {
+        min-height: 500px;
+    }
+    @media #{$md-layout} {
+        min-height: 450px;
+    }
+    @media #{$sm-layout} {
+        min-height: 400px;
+    }
+    .thumbnail-inner{
+        transition: transform .28s ease;
+        z-index: 9;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-size: cover;
+        background-position: center;
+        overflow: hidden;
+        border-radius: 5px;
+        cursor: pointer;
+
+        &::before{
+            background-color: #f6004c;
+            background-image: linear-gradient(#f6004c 10%, #000000 100%);
+            position: absolute;
+            content: "";
+            top: 0;
+            left: 0;
+            width: 100%;
+            height : 100%;
+            z-index: 5;
+            opacity: 0;
+            @extend %transition;
+        }
+    }
+    .thumbnail{
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-size: cover;
+        background-position: center;
+        border-radius: 5px;
+        background-color: #0a0a0a;
+        transform: scale(1.13) translateZ(0);
+        backface-visibility: hidden;
+        transition: transform .28s ease;
+        z-index: 4;
+        &.bluelightcard{
+            background-image: url(/images/client/bluelightcard.jpg);
+        }
+
+        &.hsbc{
+            background-image: url(/images/client/hsbc.jpg);
+        }
+
+        &.vm{
+            background-image: url(/images/client/vm.jpg);
+        }
+
+        &.engie {
+            background-image: url(/images/client/engie.jpg);
+        }
+        &.db {
+            background-image: url(/images/client/db.jpg);
+        }
+        &.worldpay {
+            background-image: url(/images/client/worldpay.jpg);
+        }
+
+        &::after{
+            background-color: rgba(45,45,45,.35);
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            content: ' ';
+            z-index: 1;
+            display: block;
+            border-radius: 5px;
+            background-color: rgba(25,25,25,.37);
+            @extend %transition;
+        }
+    }
+
+    .bg-blr-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-size: cover;
+        background-position: center;
+        background-color: #0a0a0a;
+        @extend %transition;
+        transform: translateY(38px);
+        opacity: 0;
+        z-index: 1;
+    }
+
+    .content {
+        position: absolute;
+        bottom: 40px;
+        left: 40px;
+        right: 40px;
+        max-width: 100%!important;
+        z-index: 10;
+        padding: 0;
+        @media #{$lg-layout} {
+            left: 20px;
+            right: 20px;
+        }
+        @media #{$md-layout} {
+            left: 20px;
+            right: 20px;
+        }
+        @media #{$sm-layout} {
+            left: 20px;
+            right: 20px;
+        }
+        .inner {
+            p {
+                color: #c6c9d8;
+                font-size: 14px;
+            }
+            h4 {
+                font-size: 24px;
+                line-height: 36px;
+                a{
+                    color: #ffffff;
+                }
+            }
+            .portfolio-button{
+                @extend %transition;
+                margin-top: 35px;
+                transition: 0.7s;
+                @media #{$large-mobile} {
+                    margin-top: 25px;
+                }
+                a {
+                    &.rn-btn{
+                        color: #ffffff;
+                        border-color: rgba(255,255,255,0.3);
+                        &:hover{
+                            border-color: $theme-color;
+                        }
+                    }
+                }
+            }
+        }
+    }
+  }

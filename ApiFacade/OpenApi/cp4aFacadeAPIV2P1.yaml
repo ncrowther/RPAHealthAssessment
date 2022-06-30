@@ -1,0 +1,206 @@
+openapi: 3.0.1
+info:
+  title: RPA API
+  description: |-
+    This API presents an authenticated interface to invoke bot scripts both synchronously and asynchronously.  Authentication is enforced through Basic Auth (username/password).  Authentication is managed through a nodejs server script which has to be deployed in the DMZ. On invocation of the API, the server script checks the credentials against a LDAP database and if authenticated, forwards on the request to the specified RPA computer behind a firewall. The API has a loopback setting to simulate an RPA bot when an RPA environment is not available. ![Architecture](https://rpapi.eu-gb.mybluemix.net/Architecture.png)
+
+    Examples and labs- <br><br>[Presentation](/RPAWithAppConnect.pdf) <br>[Lab Guide](/labguide.pdf) <br>[Video](https://youtu.be/_BL6wobZlJ8) <br>[IBM RPA Agent API](https://www.ibm.com/docs/en/rpa/21.0?topic=bot-starting-bots-by-api-call) <br>[Git Repo](https://github.com/ncrowther/rpa-secure-gateway.git)
+  contact:
+    email: ncrowther@uk.ibm.com
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+- url: https://uk1api.wdgautomation.com/v2.0/
+tags:
+- name: RPA API
+  description: Get invocation result
+  externalDocs:
+    description: Find out more
+    url: http://localhost:8080/docs
+paths:
+  /workspace/{workspaceId}/process/{processId}/instance/{instanceId}:
+    get:
+      tags:
+        - Get RPA Result
+      summary: Retreives the result of a bot process
+      description: Retreives the result of a process running on the RPA tenant specified in the URL.  All
+        requests are authenticated using a bearer token
+      operationId: getInvocationResult
+      parameters:
+      - name: workspaceId   # Note the name is the same as in the path
+        in: path
+        required: true
+        schema:
+          type: string
+          minimum: 1
+        description: The process ID
+      - name: processId   # Note the name is the same as in the path
+        in: path
+        required: true
+        schema:
+          type: string
+          minimum: 1
+        description: The process ID
+      - name: instanceId   # Note the name is the same as in the path
+        in: path
+        required: true
+        schema:
+          type: string
+          minimum: 1
+        description: The instance ID
+      responses:
+        200:
+          description: Response for the execution of the bot.
+            Contains  the output parameters that are returned by the bot execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RPAResponse'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Error occurring when invoking the execution of the decision
+            service operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+      deprecated: false
+  /workspace/{workspaceId}/process/{processId}/instance:
+    post:
+      tags:
+      - RPA invoke API
+      summary: Asynchronously runs a bot process
+      description: Asynchronously runs a process on a RPA tenant specified in the URL.  All
+        requests are authenticated using a bearer token
+      operationId: runSyncScript
+      parameters:
+      - name: workspaceId   # Note the name is the same as in the path
+        in: path
+        required: true
+        schema:
+          type: string
+          minimum: 1
+        description: The process ID
+      - name: processId   # Note the name is the same as in the path
+        in: path
+        required: true
+        schema:
+          type: string
+          minimum: 1
+        description: The process ID
+      - name: lang
+        in: query
+        description: Bot script name to run.  This script must be published on the
+          tenant belonging to the host
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Input parameters corresponding to the RPA bot script to be invoked.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RPARequest'
+        required: false
+      responses:
+        200:
+          description: Response for the execution of the bot.
+            Contains  the output parameters that are returned by the bot execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RPAResponse'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Error occurring when invoking the execution of the decision
+            service operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+      deprecated: false
+components:
+  schemas:
+    RPARequest:
+      type: object
+      properties:
+        in_region:
+          type: string
+          description: "Unique identifier of a patient"
+      description: Input parameters corresponding to the RPA bot script to be invoked.
+    RPAResponse:
+      type: object
+      properties:
+        out_success:
+          type: boolean
+          description: "true if success, false otherwise"
+        out_forecastDateTime:
+          type: string
+          description: "Date of forecast"
+        out_forecast:
+          type: string
+          description: "Forecast description"
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: HTTP error code.
+          format: int32
+        message:
+          type: string
+          description: Error message.
+        details:
+          type: string
+          description: Detailed error message.
+        errorCode:
+          type: string
+          description: Product error code.
+      description: Error occurring when invoking the execution of the decision service
+        operation.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: JWT Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: JWT

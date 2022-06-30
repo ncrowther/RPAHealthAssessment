@@ -1,5 +1,5 @@
 
-	w{BaF†Êç2¸Ñc›/defVar --name in_param_patient_id --type String --value M3A83727 --parameter 
+	w{BaF†Êç2¸Ñcµ.defVar --name in_param_patient_id --type String --value M3A83727 --parameter 
 defVar --name out_success --type Boolean --value True --output 
 defVar --name out_code --type String --value 00 --output 
 defVar --name out_desc --type String --value OK --output 
@@ -9,7 +9,7 @@ defVar --name out_height --type String --output
 defVar --name out_bmi --type String --output 
 defVar --name out_gender --type String --output 
 defVar --name browserId --type Browser
-defVar --name focusCorpUrl --type String --value "http://localhost:3000/"
+defVar --name focusCorpUrl --type String --value "https://patientrecordsgui.eu-gb.mybluemix.net/"
 defVar --name bloodPressure --type String
 defVar --name actualRepaymentAmt --type String
 defVar --name subTextList --type List --innertype String
@@ -17,7 +17,7 @@ defVar --name controlId --type String
 defVar --name xpath --type String
 defVar --name fieldPresent --type Boolean --value False
 defVar --name htmlCode --type String
-defVar --name bloodPressureStart --type Numeric --value 17
+defVar --name bloodPressureStart --type Numeric --value 10
 defVar --name bloodPressureLen --type Numeric --value 7
 defVar --name weightStart --type Numeric --value 9
 defVar --name heightStart --type Numeric --value 9
@@ -107,7 +107,7 @@ webClick --selector "Id" --id "${controlId}" --simulatehuman
 endSub
 
 beginSub --name getBloodPressure
-webGet --selector "XPath" --xpath "/html/body/div/div/h2[1]" --timeout "00:00:05" out_blood_pressure=value
+webGet --selector "Id" --id bloodPressure --timeout "00:00:05" out_blood_pressure=value
 
 if --left "${out_blood_pressure}" --operator "Is_Empty"
 	setVar --name "${out_success}" --value false
@@ -121,7 +121,7 @@ getSubString --text "${out_blood_pressure}" --start ${bloodPressureStart} out_bl
 endSub
 
 beginSub --name getWeight
-webGet --selector "XPath" --xpath "/html/body/div/div/h2[2]" --timeout "00:00:05" out_weight=value
+webGet --selector "Id" --id weight --timeout "00:00:05" out_weight=value
 
 if --left "${out_weight}" --operator "Is_Empty"
 	setVar --name "${out_success}" --value false
@@ -135,7 +135,7 @@ getSubString --text "${out_weight}" --start ${weightStart} out_weight=value
 endSub
 
 beginSub --name getHeight
-webGet --selector "XPath" --xpath "/html/body/div/div/h2[3]" --timeout "00:00:05" out_height=value
+webGet --selector "Id" --id height --timeout "00:00:05" out_height=value
 
 if --left "${out_height}" --operator "Is_Empty"
 	setVar --name "${out_success}" --value false
@@ -149,7 +149,7 @@ getSubString --text "${out_height}" --start ${heightStart} out_height=value
 endSub
 
 beginSub --name getBmi
-webGet --selector "XPath" --xpath "/html/body/div/div/h2[4]" --timeout "00:00:05" out_bmi=value
+webGet --selector "Id" --id bmi --timeout "00:00:05" out_bmi=value
 
 if --left "${out_bmi}" --operator "Is_Empty"
 	setVar --name "${out_success}" --value false
@@ -163,7 +163,7 @@ getSubString --text "${out_bmi}" --start ${bmiStart} out_bmi=value
 endSub
 
 beginSub --name getGender
-webGet --selector "XPath" --xpath "/html/body/div/div/h2[5]" --timeout "00:00:05" out_gender=value
+webGet --selector "Id" --id gender --timeout "00:00:05" out_gender=value
 
 if --left "${out_gender}" --operator "Is_Empty"
 	setVar --name "${out_success}" --value false
@@ -186,4 +186,4 @@ beginSub --name clickRefundButton
 setVar --name "${controlId}" --value submit
 goSub --label waitWebClickId
 delay --timeout "00:00:01"
-endSub"	¬q:n¦|KªË%îøDÀ¿*21.0.1.5
+endSub"	—Š¨ITÍÁC´©åf!WCj*21.0.2.2

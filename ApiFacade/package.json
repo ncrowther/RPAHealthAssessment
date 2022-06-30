@@ -1,7 +1,7 @@
 {
-  "name": "CP4AIntegration",
+  "name": "systmone",
   "version": "1.0.0",
-  "description": "Example on using CP4AIntegration. React-app with a Node Express Backend for APIs",
+  "description": "SysmOne Medical records simulator. React-app with a Node Express Backend",
   "author": {
     "name": "Nigel T. Crowther"
   },
