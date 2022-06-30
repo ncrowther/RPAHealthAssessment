@@ -11,11 +11,11 @@ const axiosNoSSLCheckInstance = axios.create({
 
 console.log('POST upload health assessment to CM...')
 
-const sourceFilepath = 'D:\\A_Consultancy\\Presales\\nedbank'
-const sourceFilename = process.argv[2] // script param 1
+const sourceFilepath = process.argv[2] // script param 1
+const sourceFilename = process.argv[3] // script param 2
 var destinationFolder = 'test'
 destinationFolder = ' \\"/TECHSALES HOME DIRECTORY/Nigel/' + destinationFolder + '\\" '
-var destinationFilename = process.argv[2]
+var destinationFilename = process.argv[3]
 destinationFilename = ' \\"' + destinationFilename + '\\" '
 const fullSourcePath = sourceFilepath + '\\' + sourceFilename
 

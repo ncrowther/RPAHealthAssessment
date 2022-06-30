@@ -1,14 +1,15 @@
-„	defVar --name exitCode --type Numeric
+ÅdefVar --name exitCode --type Numeric
 defVar --name output --type String
 defVar --name error --type String
-defVar --name uploadReport --type String --value "smile.bmp"
+defVar --name uploadPath --type String --value "D:\\A_Consultancy\\Presales\\nedbank"
+defVar --name uploadReport --type String --value "frown.bmp"
 defVar --name success --type Boolean
 defVar --name foundIndex --type Numeric
-runWindowsScript --scripttype "BATScript" --source "Text" --script "@echo off\r\n\r\nREM run nodejs with params %1\r\n\r\nIF %1.==. GOTO No1\r\n\r\nset PATH=%PATH%;C:\\Users\\NigelCrowther\\AppData\\Roaming\\npm\r\nset SCRIPT_HOME=\"D:\\RPA\\github\\RPAHealthAssessment\\ApiFacade\"\r\n\r\nd:\r\ncd %SCRIPT_HOME%\r\nnode uploadToContentNavigator.js %1 \r\n\r\nGOTO End1\r\n\r\n:No1\r\n  ECHO No param 1\r\nGOTO End1\r\n\r\n:End1\r\n\r\necho %result%" --arguments "${uploadReport}" --blockexecution  exitCode=exitcode output=output error=error
+runWindowsScript --scripttype "BATScript" --source "Text" --script "@echo off\r\n\r\nREM run nodejs with params %1 %2\r\n\r\nIF %1.==. GOTO No1\r\n\r\nset PATH=%PATH%;C:\\Users\\NigelCrowther\\AppData\\Roaming\\npm\r\nset SCRIPT_HOME=\"D:\\RPA\\github\\RPAHealthAssessment\\ApiFacade\"\r\n\r\nd:\r\ncd %SCRIPT_HOME%\r\nnode uploadToContentNavigator.js %1 %2\r\n\r\nGOTO End1\r\n\r\n:No1\r\n  ECHO No param 1\r\nGOTO End1\r\n\r\n:End1\r\n\r\necho %result%" --arguments "${uploadPath} ${uploadReport}" --blockexecution  exitCode=exitcode output=output error=error
 parseText --text "${output}" --query "uploaded " --startindex 1 foundIndex=value
 logMessage --message "Success: ${success}" --type "Info"
 if --left "${foundIndex}" --operator "Greater_Than" --right 0
-	messageBox --title Cruise --text "Uploaded\r\n" --icon "Information" --buttons "OK" --defaultbutton "FirstButton"
+	messageBox --title Cruise --text "Uploaded ${uploadPath}\\${uploadReport} to Content Navigator\r\n" --icon "Information" --buttons "OK" --defaultbutton "FirstButton"
 else
 	messageBox --title "No Cruise" --text "Failed upload\r\n" --icon "Information" --buttons "OK" --defaultbutton "FirstButton"
 endIf*21.0.2.5
