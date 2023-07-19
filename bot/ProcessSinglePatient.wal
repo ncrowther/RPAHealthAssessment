@@ -1,5 +1,5 @@
 
-	w{BaF†Êç2¸Ñcµ.defVar --name in_param_patient_id --type String --value M3A83727 --parameter 
+	w{BaF†Êç2¸ÑcÉ.defVar --name in_param_patient_id --type String --value M3A83727 --parameter 
 defVar --name out_success --type Boolean --value True --output 
 defVar --name out_code --type String --value 00 --output 
 defVar --name out_desc --type String --value OK --output 
@@ -45,7 +45,7 @@ webNavigate --url "${focusCorpUrl}" --comment "Navigate to Refund web site"
 goSub --label enterPatientId
 
 if --left "${browserId}" --operator "Is_Null" --negate 
-	webClose --name browser
+	webClose --name browser --leavebrowseropen 
 endIf
 
 logMessage --message "out_success: ${out_success}\r\nout_code: ${out_code}\r\nout_desc: ${out_desc}\r\n" --type "Info"
@@ -186,4 +186,4 @@ beginSub --name clickRefundButton
 setVar --name "${controlId}" --value submit
 goSub --label waitWebClickId
 delay --timeout "00:00:01"
-endSub"	—Š¨ITÍÁC´©åf!WCj*21.0.2.2
+endSub"	—Š¨ITÍÁC´©åf!WCj*21.0.4.0
